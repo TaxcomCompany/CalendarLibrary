@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/date_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="90dp"
+    android:layout_height="40dp">
+
+    <ru.taxcom.mobile.android.calendarlibrary.util.textview.RegularTextView
+        android:id="@+id/date_text"
+        android:layout_width="90dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        tools:background="@drawable/select_shape"
+        tools:text="Сентябрь"
+        tools:textColor="@color/colorPrimary" />
+</LinearLayout>

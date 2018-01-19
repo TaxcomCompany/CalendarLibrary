@@ -1,0 +1,90 @@
+buildscript {
+    repositories {
+        jcenter()
+        google()
+        // TODO remove after butterknife 9 graduates to stable
+        maven { name 'Sonatype SNAPSHOTs'; url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath "com.jakewharton:butterknife-gradle-plugin:9.0.0-20171223.061039-23"
+    }
+}
+apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'com.android.library'
+
+ext {
+    bintrayRepo = 'calendar'
+    bintrayName = 'calendarlibrary'   // Has to be same as your library module name
+
+    publishedGroupId = 'ru.taxcom.mobile.android'
+    libraryName = 'calendarlibrary'
+    artifact = 'calendarlibrary'     // Has to be same as your library module name
+
+    libraryDescription = 'Calendar library to select period'
+
+
+    siteUrl = ''
+    gitUrl = 'gitlab.taxcom.ru'
+    githubRepository= ''
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'ErmolaevIO'
+    developerName = 'Ermolaev Igor'
+    developerEmail = 'ErmolaevIO@taxcom.ru'
+
+    licenseName = 'The MIT License (MIT)'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
+}
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        minSdkVersion 18
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+ext {
+    supportLibraryVersion = '27.0.2'
+    butterknife = '8.8.1'
+    rxandroid = '2.0.1'
+    rxbinding = '2.0.0'
+    rxjava = '2.1.0'
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation "com.android.support:design:$supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
+    implementation "com.jakewharton:butterknife:$butterknife"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid"
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava"
+}
+
+apply from: 'https://raw.githubusercontent.com/nisrulz/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nisrulz/JCenter/master/bintrayv1.gradle'

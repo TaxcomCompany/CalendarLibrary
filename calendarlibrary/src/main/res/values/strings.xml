@@ -1,0 +1,19 @@
+<resources>
+    <string name="date_range_picker_select_date">Выберите дату</string>
+    <string name="date_range_picker_selected_date">Выбрана дата</string>
+    <string name="date_range_picker_select_range">Выберите интервал</string>
+    <string name="date_range_picker_selected_range">Выбран интервал</string>
+    <string name="date_range_picker_select_month">Выберите месяц</string>
+    <string name="date_range_picker_select_year">Выберите год</string>
+    <string name="date_range_picker_cancel_btn">ОТМЕНА</string>
+    <string name="date_range_btn_ok">ГОТОВО</string>
+    <string-array name="date_range_picker_days">
+        <item>Пн</item>
+        <item>Вт</item>
+        <item>Ср</item>
+        <item>Чт</item>
+        <item>Пт</item>
+        <item>Сб</item>
+        <item>Вс</item>
+    </string-array>
+</resources>
