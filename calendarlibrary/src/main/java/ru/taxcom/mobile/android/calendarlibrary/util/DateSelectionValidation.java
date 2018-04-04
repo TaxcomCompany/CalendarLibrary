@@ -20,6 +20,7 @@ public class DateSelectionValidation {
     private Long mNextMonthOrYear;
     private long mSelectedDate;
     private int mCurrentYear;
+    private boolean mTomorrowIsBorder;
 
     public void calculateCountYear() {
         Calendar startCalendar = Calendar.getInstance();
@@ -174,6 +175,9 @@ public class DateSelectionValidation {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(StringUtil.getUtcNoTime(new Date()));
         calendar.set(Calendar.DAY_OF_MONTH, 1);
+        // set max date to select
+        if (!mTomorrowIsBorder)
+            calendar.set(2070, 11, 1);
         return calendar;
     }
 
@@ -184,5 +188,9 @@ public class DateSelectionValidation {
 
     public long getSelectedDate() {
         return mSelectedDate;
+    }
+
+    public void setTomorrowIsBorder(boolean tomorrowIsBorder) {
+        mTomorrowIsBorder = tomorrowIsBorder;
     }
 }
