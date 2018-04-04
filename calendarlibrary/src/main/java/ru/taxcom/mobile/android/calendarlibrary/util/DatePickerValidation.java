@@ -31,12 +31,14 @@ public class DatePickerValidation {
     private Long mBeginDisabledDate;
     @Nullable
     private Long mEndDisabledDate;
-    private Long mDateSinceTomorrow;
+    private Long mDateBorder;
     private int mMaxRange;
+    private boolean mTomorrowIsBorder;
 
-    public DatePickerValidation() {
+    public DatePickerValidation(boolean tomorrowIsBorder) {
+        mTomorrowIsBorder = tomorrowIsBorder;
         mCountMonthsEpoch = calcCountMonths();
-        mDateSinceTomorrow = calcTomorrowDate();
+        mDateBorder = calcFutureDate();
     }
 
     public void setMaxRange(int maxRange) {
@@ -106,7 +108,7 @@ public class DatePickerValidation {
                 mEndDateInSec = dateInSec;
             }
             mBeginDisabledDate = null;
-            mEndDisabledDate = mDateSinceTomorrow;
+            mEndDisabledDate = mDateBorder;
         } else {
             mBeginDateInSec = dateInSec;
             mEndDateInSec = null;
@@ -122,10 +124,10 @@ public class DatePickerValidation {
             mBeginDisabledDate = calendar.getTimeInMillis() / 1000;
             calendar.add(Calendar.DAY_OF_MONTH, mMaxRange * 2);
             long endDisabled = calendar.getTimeInMillis() / 1000;
-            if (endDisabled <= mDateSinceTomorrow) {
+            if (endDisabled <= mDateBorder) {
                 mEndDisabledDate = endDisabled;
             } else {
-                mEndDisabledDate = mDateSinceTomorrow;
+                mEndDisabledDate = mDateBorder;
             }
         }
     }
@@ -201,12 +203,15 @@ public class DatePickerValidation {
     private Calendar getCurrentCalendar() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(StringUtil.getUtcNoTime(new Date()));
+        // set max date to select
+        if (!mTomorrowIsBorder)
+            calendar.set(2070, 11, 31);
         return calendar;
     }
 
     private boolean isActiveDate(Long dateInSec) {
         if (mEndDisabledDate == null) {
-            mEndDisabledDate = mDateSinceTomorrow;
+            mEndDisabledDate = mDateBorder;
         }
         if (dateInSec >= mEndDisabledDate) {
             return false;
@@ -216,7 +221,7 @@ public class DatePickerValidation {
         return true;
     }
 
-    private Long calcTomorrowDate() {
+    private Long calcFutureDate() {
         Calendar calendar = getCurrentCalendar();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         return calendar.getTimeInMillis() / 1000;

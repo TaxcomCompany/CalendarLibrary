@@ -24,4 +24,22 @@
         android:padding="7dp"
         android:text="SingleDate" />
 
+    <TextView
+        android:id="@+id/single_date2070"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:padding="7dp"
+        android:text="SingleDate2070" />
+
+    <TextView
+        android:id="@+id/period_date2070"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:padding="7dp"
+        android:text="PeriodDate2070" />
+
 </LinearLayout>

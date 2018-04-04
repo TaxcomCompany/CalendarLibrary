@@ -38,6 +38,7 @@ public class DateRangePickerActivity extends AppCompatActivity implements DateRa
     public static final String DATE_TEXT = "date_text";
     public static final String MODE = "mode";
     public static final String SINGLE_DATE = "single_date";
+    public static final String BORDER_TO_SELECT = "border_to_select";
 
     @BindView(R2.id.title_select_date)
     TextView mTitle;
@@ -68,12 +69,14 @@ public class DateRangePickerActivity extends AppCompatActivity implements DateRa
                              @PickerMode int mode,
                              @Nullable Long beginSelectedDate,
                              @Nullable Long endSelectedDate,
-                             @Nullable Integer maxRange) {
+                             @Nullable Integer maxRange,
+                             boolean tomorrowIsBorder) {
         Intent intent = new Intent(activity, DateRangePickerActivity.class);
         intent.putExtra(MAX_RANGE, maxRange);
         intent.putExtra(MODE, mode);
         intent.putExtra(BEGIN_DATE_PICKER, beginSelectedDate);
         intent.putExtra(END_DATE_PICKER, endSelectedDate);
+        intent.putExtra(BORDER_TO_SELECT, tomorrowIsBorder);
         activity.startActivityForResult(intent, REQUEST_CODE_PICKER);
     }
 
@@ -91,7 +94,8 @@ public class DateRangePickerActivity extends AppCompatActivity implements DateRa
         mPresenter.initialization(getIntent().getIntExtra(MODE, NOT_SELECTED),
                 getIntent().getLongExtra(BEGIN_DATE_PICKER, NOT_SELECTED),
                 getIntent().getLongExtra(END_DATE_PICKER, NOT_SELECTED),
-                getIntent().getIntExtra(MAX_RANGE, MAX_RANGE_NOT_SELECTED));
+                getIntent().getIntExtra(MAX_RANGE, MAX_RANGE_NOT_SELECTED),
+                getIntent().getBooleanExtra(BORDER_TO_SELECT, true));
         initDaysOfWeek();
     }
 
