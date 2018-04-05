@@ -33,9 +33,10 @@ public class DateSelectionPresenterImpl implements DatePickerSelectionPresenter 
     }
 
     @Override
-    public void initialization(@SelectionMode int mode, long clickedDate, int currentYear) {
+    public void initialization(@SelectionMode int mode, long clickedDate, int currentYear, boolean tomorrowIsBorder) {
         mMode = mode;
         int currentPosition;
+        mValidation.setTomorrowIsBorder(tomorrowIsBorder);
         switch (mode) {
             case SelectionMode.SELECT_MONTH:
                 mValidation.calculateCountYear();

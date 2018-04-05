@@ -9,7 +9,7 @@ import ru.taxcom.mobile.android.calendarlibrary.model.SelectionMode;
 import ru.taxcom.mobile.android.calendarlibrary.views.DatePickerSelectionView;
 
 public interface DatePickerSelectionPresenter {
-    void initialization(@SelectionMode int mode, long currentDate, int currentYear);
+    void initialization(@SelectionMode int mode, long currentDate, int currentYear, boolean tomorrowIsBorder);
 
     void bindView(DatePickerSelectionView view);
 

@@ -22,6 +22,8 @@ import ru.taxcom.mobile.android.calendarlibrary.model.SelectionMode;
 import ru.taxcom.mobile.android.calendarlibrary.presentetion.implemenattion.DateSelectionPresenterImpl;
 import ru.taxcom.mobile.android.calendarlibrary.presentetion.presener.DatePickerSelectionPresenter;
 
+import static ru.taxcom.mobile.android.calendarlibrary.views.DateRangePickerActivity.TOMORROW_IS_BORDER;
+
 
 public class DateSelectionFragment extends Fragment implements DatePickerSelectionView {
 
@@ -42,11 +44,12 @@ public class DateSelectionFragment extends Fragment implements DatePickerSelecti
 
     private DatePickerSelectionPresenter mPresenter;
 
-    public static DateSelectionFragment newInstance(@SelectionMode int mode, long currentDateInSec, int currentYear) {
+    public static DateSelectionFragment newInstance(@SelectionMode int mode, long currentDateInSec, int currentYear, boolean tomorrowIsBorder) {
         Bundle bundle = new Bundle();
         bundle.putInt(SELECTION_MODE, mode);
         bundle.putLong(CLICKED_DATE, currentDateInSec);
         bundle.putInt(CLICKED_YEAR, currentYear);
+        bundle.putBoolean(TOMORROW_IS_BORDER, tomorrowIsBorder);
         DateSelectionFragment fr = new DateSelectionFragment();
         fr.setArguments(bundle);
         return fr;
@@ -67,7 +70,8 @@ public class DateSelectionFragment extends Fragment implements DatePickerSelecti
         mPresenter.initialization(
                 getArguments().getInt(SELECTION_MODE, -1),
                 getArguments().getLong(CLICKED_DATE, -1),
-                getArguments().getInt(CLICKED_YEAR, -1));
+                getArguments().getInt(CLICKED_YEAR, -1),
+                getArguments().getBoolean(TOMORROW_IS_BORDER, true));
     }
 
     @Override
@@ -147,7 +151,8 @@ public class DateSelectionFragment extends Fragment implements DatePickerSelecti
     public void selectYear(long date, int currentYear) {
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_container, DateSelectionFragment.newInstance(SelectionMode.SELECT_YEAR, date, currentYear))
+                .add(R.id.fragment_container, DateSelectionFragment.newInstance(SelectionMode.SELECT_YEAR,
+                        date, currentYear, getArguments().getBoolean(TOMORROW_IS_BORDER, true)))
                 .addToBackStack(null)
                 .commitAllowingStateLoss();
     }

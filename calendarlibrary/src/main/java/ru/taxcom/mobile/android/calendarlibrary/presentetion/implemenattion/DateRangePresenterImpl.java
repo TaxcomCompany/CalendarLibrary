@@ -2,6 +2,7 @@ package ru.taxcom.mobile.android.calendarlibrary.presentetion.implemenattion;
 
 import android.content.Context;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -15,11 +16,12 @@ import ru.taxcom.mobile.android.calendarlibrary.model.PickerMode;
 import ru.taxcom.mobile.android.calendarlibrary.model.PickerModel;
 import ru.taxcom.mobile.android.calendarlibrary.presentetion.presener.DateRangePresenter;
 import ru.taxcom.mobile.android.calendarlibrary.util.DatePickerValidation;
+import ru.taxcom.mobile.android.calendarlibrary.util.StringUtil;
 import ru.taxcom.mobile.android.calendarlibrary.views.DateRangePickerView;
 
 public class DateRangePresenterImpl implements DateRangePresenter {
     public static final int NOT_SELECTED = -1;
-    private final DatePickerValidation mValidation;
+    private DatePickerValidation mValidation;
     private DateRangePickerView mView;
     @PickerMode
     private int mMode;
@@ -27,7 +29,6 @@ public class DateRangePresenterImpl implements DateRangePresenter {
 
     public DateRangePresenterImpl(Context context) {
         mContext = context;
-        mValidation = new DatePickerValidation();
     }
 
     @Override
@@ -36,10 +37,11 @@ public class DateRangePresenterImpl implements DateRangePresenter {
     }
 
     @Override
-    public void initialization(@PickerMode int mode, long beginDate, long endDate, int maxRange) {
+    public void initialization(@PickerMode int mode, long beginDate, long endDate, int maxRange, boolean tomorrowIsBorder) {
         if (mMode == NOT_SELECTED) {
             throw new RuntimeException("mode is required field");
         }
+        mValidation = new DatePickerValidation(tomorrowIsBorder);
         mMode = mode;
         setSelectedDates(beginDate, endDate);
         setTitle();
@@ -174,7 +176,7 @@ public class DateRangePresenterImpl implements DateRangePresenter {
     @Override
     public void updatePage(long dateInSec) {
         if (dateInSec == NOT_SELECTED) {
-            return;
+            dateInSec = StringUtil.getUtcNoTime(new Date()).getTime() / 1000;
         }
         int position = mValidation.getPosition(dateInSec);
         mView.showMonth(mValidation.getMonth(position));
