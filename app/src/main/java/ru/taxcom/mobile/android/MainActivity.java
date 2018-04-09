@@ -42,7 +42,10 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.single_date2070)
     public void onSingle2070Click() {
-        DateRangePickerActivity.start(this, PickerMode.SELECT_SINGLE_DATE, null, null, null, false);
+        DateRangePickerActivity.start(this, PickerMode.SELECT_SINGLE_DATE,
+                StringUtil.getUtcNoTime(new Date()).getTime() / 1000,
+                null,
+                null, false);
     }
 
     @OnClick(R.id.period_date2070)

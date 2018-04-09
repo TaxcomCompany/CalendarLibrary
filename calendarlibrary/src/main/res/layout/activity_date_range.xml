@@ -143,7 +143,7 @@
         android:layout_marginTop="10dp"
         android:orientation="horizontal" />
 
-    <android.support.v4.view.ViewPager
+    <ru.taxcom.mobile.android.calendarlibrary.util.customView.CustomViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

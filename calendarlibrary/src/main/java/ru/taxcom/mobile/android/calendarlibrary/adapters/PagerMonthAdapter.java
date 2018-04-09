@@ -45,7 +45,8 @@ public class PagerMonthAdapter extends PagerAdapter {
 
     private final ArrayMap<Integer, PickerAdapter> mAdapters;
 
-    public PagerMonthAdapter(Context context, int count, int mode, OnDateSelected listener, CreateDataListener createDataListener, @Nullable UpdateDataListener updateDataListener) {
+    public PagerMonthAdapter(Context context, int count, int mode, OnDateSelected listener,
+                             CreateDataListener createDataListener, @Nullable UpdateDataListener updateDataListener) {
         mContext = context;
         mCount = count;
         mMode = mode;
@@ -107,7 +108,6 @@ public class PagerMonthAdapter extends PagerAdapter {
         calendarList.setHasFixedSize(true);
         calendarList.setAdapter(pickerAdapter);
         calendarList.addItemDecoration(new GridSpacingItemDecoration(mContext, span, widthViewDp));
-        layout.setRotationY(180);
 
         mAdapters.put(position, pickerAdapter);
         mCreateDataListener.create(position, pickerAdapter::update);

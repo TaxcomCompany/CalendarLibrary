@@ -15,16 +15,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.functions.Consumer;
 import ru.taxcom.mobile.android.calendarlibrary.R;
 import ru.taxcom.mobile.android.calendarlibrary.R2;
 import ru.taxcom.mobile.android.calendarlibrary.adapters.PagerMonthAdapter;
 import ru.taxcom.mobile.android.calendarlibrary.model.PickerMode;
+import ru.taxcom.mobile.android.calendarlibrary.model.PickerModel;
 import ru.taxcom.mobile.android.calendarlibrary.model.SelectionMode;
 import ru.taxcom.mobile.android.calendarlibrary.presentetion.implemenattion.DateRangePresenterImpl;
 import ru.taxcom.mobile.android.calendarlibrary.presentetion.presener.DateRangePresenter;
+import ru.taxcom.mobile.android.calendarlibrary.util.customView.CustomViewPager;
 
 import static ru.taxcom.mobile.android.calendarlibrary.presentetion.implemenattion.DateRangePresenterImpl.NOT_SELECTED;
 import static ru.taxcom.mobile.android.calendarlibrary.util.DatePickerValidation.MAX_RANGE_NOT_SELECTED;
@@ -45,7 +50,7 @@ public class DateRangePickerActivity extends AppCompatActivity implements DateRa
     @BindView(R2.id.calendar_image)
     ImageView mCalendarImage;
     @BindView(R2.id.viewPager)
-    ViewPager mViewPager;
+    CustomViewPager mViewPager;
     @BindView(R2.id.month)
     TextView mMonth;
     @BindView(R2.id.next_month)
@@ -102,12 +107,12 @@ public class DateRangePickerActivity extends AppCompatActivity implements DateRa
     @Override
     public void initPager(int countMonths) {
         mViewPager.setAdapter(new PagerMonthAdapter(this, countMonths, PagerMonthAdapter.SELECT_PERIOD,
-                mPresenter::onDateSelected, mPresenter::createItems, mPresenter::updateItems));
+                mPresenter::onDateSelected, this::createItems, mPresenter::updateItems));
         mViewPager.setOffscreenPageLimit(1);
-        mViewPager.setRotationY(180);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
+                position = mViewPager.convertPosition(position);
                 mPresenter.updateMonth(position);
                 mPresenter.checkArrowBtn(position);
             }
@@ -118,6 +123,10 @@ public class DateRangePickerActivity extends AppCompatActivity implements DateRa
             @Override
             public void onPageScrollStateChanged(int state) {/*ignored*/}
         });
+    }
+
+    private void createItems(int position, Consumer<List<PickerModel>> listener) {
+        mPresenter.createItems(mViewPager.convertPosition(position), listener);
     }
 
     private void initDaysOfWeek() {

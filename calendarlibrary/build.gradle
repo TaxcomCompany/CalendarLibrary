@@ -6,7 +6,7 @@ buildscript {
         maven { name 'Sonatype SNAPSHOTs'; url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.0'
         classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0-SNAPSHOT'
     }
 }
@@ -65,7 +65,7 @@ android {
 }
 
 ext {
-    supportLibraryVersion = '27.0.2'
+    supportLibraryVersion = '27.1.0'
     butterknife = '8.8.1'
     rxandroid = '2.0.1'
     rxbinding = '2.0.0'

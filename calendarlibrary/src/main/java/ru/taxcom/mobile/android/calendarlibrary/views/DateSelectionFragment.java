@@ -12,15 +12,20 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.functions.Consumer;
 import ru.taxcom.mobile.android.calendarlibrary.R;
 import ru.taxcom.mobile.android.calendarlibrary.R2;
 import ru.taxcom.mobile.android.calendarlibrary.adapters.PagerMonthAdapter;
+import ru.taxcom.mobile.android.calendarlibrary.model.PickerModel;
 import ru.taxcom.mobile.android.calendarlibrary.model.SelectionMode;
 import ru.taxcom.mobile.android.calendarlibrary.presentetion.implemenattion.DateSelectionPresenterImpl;
 import ru.taxcom.mobile.android.calendarlibrary.presentetion.presener.DatePickerSelectionPresenter;
+import ru.taxcom.mobile.android.calendarlibrary.util.customView.CustomViewPager;
 
 import static ru.taxcom.mobile.android.calendarlibrary.views.DateRangePickerActivity.TOMORROW_IS_BORDER;
 
@@ -34,7 +39,7 @@ public class DateSelectionFragment extends Fragment implements DatePickerSelecti
     @BindView(R2.id.title_picker_selection)
     TextView mTitle;
     @BindView(R2.id.viewPager)
-    ViewPager mViewPager;
+    CustomViewPager mViewPager;
     @BindView(R2.id.year)
     TextView mCurrentYear;
     @BindView(R2.id.year_switch_container)
@@ -44,7 +49,10 @@ public class DateSelectionFragment extends Fragment implements DatePickerSelecti
 
     private DatePickerSelectionPresenter mPresenter;
 
-    public static DateSelectionFragment newInstance(@SelectionMode int mode, long currentDateInSec, int currentYear, boolean tomorrowIsBorder) {
+    public static DateSelectionFragment newInstance(@SelectionMode int mode,
+                                                    long currentDateInSec,
+                                                    int currentYear,
+                                                    boolean tomorrowIsBorder) {
         Bundle bundle = new Bundle();
         bundle.putInt(SELECTION_MODE, mode);
         bundle.putLong(CLICKED_DATE, currentDateInSec);
@@ -57,7 +65,9 @@ public class DateSelectionFragment extends Fragment implements DatePickerSelecti
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_date_picker_selection, container, false);
         ButterKnife.bind(this, view);
         init();
@@ -82,13 +92,15 @@ public class DateSelectionFragment extends Fragment implements DatePickerSelecti
     @Override
     public void initPager(int pagesCount, int currentPage, PagerMonthAdapter.CreateDataListener createListener) {
         mViewPager.setAdapter(new PagerMonthAdapter(getActivity(), pagesCount, PagerMonthAdapter.SELECT_MONTH_OR_YEAR,
-                this::onDateSelected, createListener, null));
+                this::onDateSelected,
+                ((position, listener) -> createItems(position, listener, createListener)),
+                null));
         mViewPager.setOffscreenPageLimit(1);
-        mViewPager.setRotationY(180);
         mViewPager.setCurrentItem(currentPage, false);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
+                position = mViewPager.convertPosition(position);
                 mPresenter.updateSwitch(position);
                 mPresenter.checkArrowBtn(position);
             }
@@ -99,6 +111,11 @@ public class DateSelectionFragment extends Fragment implements DatePickerSelecti
             @Override
             public void onPageScrollStateChanged(int state) {/*ignored*/}
         });
+    }
+
+    private void createItems(int position, Consumer<List<PickerModel>> listener,
+                             PagerMonthAdapter.CreateDataListener createListener) {
+        createListener.create(mViewPager.convertPosition(position), listener);
     }
 
     private void onDateSelected(Long date) {
