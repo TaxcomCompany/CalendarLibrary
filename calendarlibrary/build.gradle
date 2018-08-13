@@ -6,7 +6,7 @@ buildscript {
         maven { name 'Sonatype SNAPSHOTs'; url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.0'
+        classpath 'com.android.tools.build:gradle:3.1.1'
         classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0-SNAPSHOT'
     }
 }
@@ -28,7 +28,7 @@ ext {
     gitUrl = 'gitlab.taxcom.ru'
     githubRepository= ''
 
-    libraryVersion = '1.2.1'
+    libraryVersion = '1.2.2'
 
     developerId = 'ErmolaevIO'
     developerName = 'Ermolaev Igor'

@@ -9,12 +9,12 @@ import android.util.AttributeSet;
 /**
  * Left to Right view pager
  */
-public class CustomViewPager extends ViewPager {
-    public CustomViewPager(@NonNull Context context) {
+public class ReverseViewPager extends ViewPager {
+    public ReverseViewPager(@NonNull Context context) {
         super(context);
     }
 
-    public CustomViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public ReverseViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 

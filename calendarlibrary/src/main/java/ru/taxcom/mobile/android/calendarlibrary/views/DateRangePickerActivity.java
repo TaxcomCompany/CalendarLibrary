@@ -29,7 +29,7 @@ import ru.taxcom.mobile.android.calendarlibrary.model.PickerModel;
 import ru.taxcom.mobile.android.calendarlibrary.model.SelectionMode;
 import ru.taxcom.mobile.android.calendarlibrary.presentetion.implemenattion.DateRangePresenterImpl;
 import ru.taxcom.mobile.android.calendarlibrary.presentetion.presener.DateRangePresenter;
-import ru.taxcom.mobile.android.calendarlibrary.util.customView.CustomViewPager;
+import ru.taxcom.mobile.android.calendarlibrary.util.customView.ReverseViewPager;
 
 import static ru.taxcom.mobile.android.calendarlibrary.presentetion.implemenattion.DateRangePresenterImpl.NOT_SELECTED;
 import static ru.taxcom.mobile.android.calendarlibrary.util.DatePickerValidation.MAX_RANGE_NOT_SELECTED;
@@ -49,8 +49,8 @@ public class DateRangePickerActivity extends AppCompatActivity implements DateRa
     TextView mTitle;
     @BindView(R2.id.calendar_image)
     ImageView mCalendarImage;
-    @BindView(R2.id.viewPager)
-    CustomViewPager mViewPager;
+    @BindView(R2.id.reverseViewPager)
+    ViewPager mViewPager;
     @BindView(R2.id.month)
     TextView mMonth;
     @BindView(R2.id.next_month)
@@ -112,7 +112,7 @@ public class DateRangePickerActivity extends AppCompatActivity implements DateRa
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                position = mViewPager.convertPosition(position);
+                position = ((ReverseViewPager) mViewPager).convertPosition(position);
                 mPresenter.updateMonth(position);
                 mPresenter.checkArrowBtn(position);
             }
@@ -126,7 +126,7 @@ public class DateRangePickerActivity extends AppCompatActivity implements DateRa
     }
 
     private void createItems(int position, Consumer<List<PickerModel>> listener) {
-        mPresenter.createItems(mViewPager.convertPosition(position), listener);
+        mPresenter.createItems(((ReverseViewPager) mViewPager).convertPosition(position), listener);
     }
 
     private void initDaysOfWeek() {

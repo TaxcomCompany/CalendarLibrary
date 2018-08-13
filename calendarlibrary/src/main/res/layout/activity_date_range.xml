@@ -143,8 +143,8 @@
         android:layout_marginTop="10dp"
         android:orientation="horizontal" />
 
-    <ru.taxcom.mobile.android.calendarlibrary.util.customView.CustomViewPager
-        android:id="@+id/viewPager"
+    <ru.taxcom.mobile.android.calendarlibrary.util.customView.ReverseViewPager
+        android:id="@+id/reverseViewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/cancel_btn"

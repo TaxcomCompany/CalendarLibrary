@@ -25,7 +25,7 @@ import ru.taxcom.mobile.android.calendarlibrary.model.PickerModel;
 import ru.taxcom.mobile.android.calendarlibrary.model.SelectionMode;
 import ru.taxcom.mobile.android.calendarlibrary.presentetion.implemenattion.DateSelectionPresenterImpl;
 import ru.taxcom.mobile.android.calendarlibrary.presentetion.presener.DatePickerSelectionPresenter;
-import ru.taxcom.mobile.android.calendarlibrary.util.customView.CustomViewPager;
+import ru.taxcom.mobile.android.calendarlibrary.util.customView.ReverseViewPager;
 
 import static ru.taxcom.mobile.android.calendarlibrary.views.DateRangePickerActivity.TOMORROW_IS_BORDER;
 
@@ -38,8 +38,8 @@ public class DateSelectionFragment extends Fragment implements DatePickerSelecti
 
     @BindView(R2.id.title_picker_selection)
     TextView mTitle;
-    @BindView(R2.id.viewPager)
-    CustomViewPager mViewPager;
+    @BindView(R2.id.reversePager)
+    ViewPager mViewPager;
     @BindView(R2.id.year)
     TextView mCurrentYear;
     @BindView(R2.id.year_switch_container)
@@ -100,7 +100,7 @@ public class DateSelectionFragment extends Fragment implements DatePickerSelecti
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                position = mViewPager.convertPosition(position);
+                position = ((ReverseViewPager) mViewPager).convertPosition(position);
                 mPresenter.updateSwitch(position);
                 mPresenter.checkArrowBtn(position);
             }
@@ -115,7 +115,7 @@ public class DateSelectionFragment extends Fragment implements DatePickerSelecti
 
     private void createItems(int position, Consumer<List<PickerModel>> listener,
                              PagerMonthAdapter.CreateDataListener createListener) {
-        createListener.create(mViewPager.convertPosition(position), listener);
+        createListener.create(((ReverseViewPager) mViewPager).convertPosition(position), listener);
     }
 
     private void onDateSelected(Long date) {

@@ -74,8 +74,8 @@
             tools:visibility="visible" />
     </RelativeLayout>
 
-    <ru.taxcom.mobile.android.calendarlibrary.util.customView.CustomViewPager
-        android:id="@+id/viewPager"
+    <ru.taxcom.mobile.android.calendarlibrary.util.customView.ReverseViewPager
+        android:id="@+id/reversePager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/year_switch_container"
