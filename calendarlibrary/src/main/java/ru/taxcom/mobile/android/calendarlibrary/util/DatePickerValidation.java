@@ -16,7 +16,7 @@ import ru.taxcom.mobile.android.calendarlibrary.R;
 import ru.taxcom.mobile.android.calendarlibrary.model.PickerModel;
 
 public class DatePickerValidation {
-
+    public static final int NOT_SELECTED = -1;
     private static final String MONTH_FORMAT = "LLLL yyyy";
     private static final String PERIOD_FORMAT = "EE, LLL dd";
     private static final String YEAR_FORMAT = "yyyy";
@@ -31,14 +31,21 @@ public class DatePickerValidation {
     private Long mBeginDisabledDate;
     @Nullable
     private Long mEndDisabledDate;
-    private Long mDateBorder;
+    private final Long mDateEndBorder;
+    private final Long mDateBeginBorder;
     private int mMaxRange;
     private boolean mTomorrowIsBorder;
 
-    public DatePickerValidation(boolean tomorrowIsBorder) {
+    public DatePickerValidation(boolean tomorrowIsBorder, Long beginBorderDate) {
         mTomorrowIsBorder = tomorrowIsBorder;
         mCountMonthsEpoch = calcCountMonths();
-        mDateBorder = calcFutureDate();
+        mDateEndBorder = calcFutureDate();
+
+        if (beginBorderDate == NOT_SELECTED) {
+            mDateBeginBorder = null;
+        } else {
+            mDateBeginBorder = beginBorderDate;
+        }
     }
 
     public void setMaxRange(int maxRange) {
@@ -107,8 +114,8 @@ public class DatePickerValidation {
             } else if (dateInSec.equals(mBeginDateInSec)) {
                 mEndDateInSec = dateInSec;
             }
-            mBeginDisabledDate = null;
-            mEndDisabledDate = mDateBorder;
+            mBeginDisabledDate = mDateBeginBorder;
+            mEndDisabledDate = mDateEndBorder;
         } else {
             mBeginDateInSec = dateInSec;
             mEndDateInSec = null;
@@ -121,13 +128,19 @@ public class DatePickerValidation {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date(mBeginDateInSec * 1000));
             calendar.add(Calendar.DAY_OF_MONTH, -mMaxRange);
-            mBeginDisabledDate = calendar.getTimeInMillis() / 1000;
+            long beginDisabledDate = calendar.getTimeInMillis() / 1000;
+            if (beginDisabledDate >= mDateBeginBorder) {
+                mBeginDisabledDate = beginDisabledDate;
+            } else {
+                mBeginDisabledDate = mDateBeginBorder;
+            }
+
             calendar.add(Calendar.DAY_OF_MONTH, mMaxRange * 2);
             long endDisabled = calendar.getTimeInMillis() / 1000;
-            if (endDisabled <= mDateBorder) {
+            if (endDisabled <= mDateEndBorder) {
                 mEndDisabledDate = endDisabled;
             } else {
-                mEndDisabledDate = mDateBorder;
+                mEndDisabledDate = mDateEndBorder;
             }
         }
     }
@@ -211,7 +224,10 @@ public class DatePickerValidation {
 
     private boolean isActiveDate(Long dateInSec) {
         if (mEndDisabledDate == null) {
-            mEndDisabledDate = mDateBorder;
+            mEndDisabledDate = mDateEndBorder;
+        }
+        if (mBeginDisabledDate == null) {
+            mBeginDisabledDate = mDateBeginBorder;
         }
         if (dateInSec >= mEndDisabledDate) {
             return false;

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,8 +32,8 @@ import ru.taxcom.mobile.android.calendarlibrary.presentetion.implemenattion.Date
 import ru.taxcom.mobile.android.calendarlibrary.presentetion.presener.DateRangePresenter;
 import ru.taxcom.mobile.android.calendarlibrary.util.customView.ReverseViewPager;
 
-import static ru.taxcom.mobile.android.calendarlibrary.presentetion.implemenattion.DateRangePresenterImpl.NOT_SELECTED;
 import static ru.taxcom.mobile.android.calendarlibrary.util.DatePickerValidation.MAX_RANGE_NOT_SELECTED;
+import static ru.taxcom.mobile.android.calendarlibrary.util.DatePickerValidation.NOT_SELECTED;
 
 public class DateRangePickerActivity extends AppCompatActivity implements DateRangePickerView {
 
@@ -44,6 +45,7 @@ public class DateRangePickerActivity extends AppCompatActivity implements DateRa
     public static final String MODE = "mode";
     public static final String SINGLE_DATE = "single_date";
     public static final String TOMORROW_IS_BORDER = "border_to_select";
+    public static final String BEGIN_BORDER_DATE = "begin_border_date";
 
     @BindView(R2.id.title_select_date)
     TextView mTitle;
@@ -70,18 +72,29 @@ public class DateRangePickerActivity extends AppCompatActivity implements DateRa
 
     private DateRangePresenter mPresenter;
 
+    /**
+     * @param activity          -
+     * @param mode              -
+     * @param beginSelectedDate -
+     * @param endSelectedDate   -
+     * @param maxRange          - максимально возможный период
+     * @param tomorrowIsBorder  - возможность выбора будущих дат
+     * @param beginBorderDate   - нижняя граница для выбора даты. Использовать этот метод {@link ru.taxcom.mobile.android.calendarlibrary.util.StringUtil#getCalendarUtcNoTime(Date)}
+     */
     public static void start(Activity activity,
                              @PickerMode int mode,
                              @Nullable Long beginSelectedDate,
                              @Nullable Long endSelectedDate,
                              @Nullable Integer maxRange,
-                             boolean tomorrowIsBorder) {
+                             boolean tomorrowIsBorder,
+                             @Nullable Long beginBorderDate) {
         Intent intent = new Intent(activity, DateRangePickerActivity.class);
         intent.putExtra(MAX_RANGE, maxRange);
         intent.putExtra(MODE, mode);
         intent.putExtra(BEGIN_DATE_PICKER, beginSelectedDate);
         intent.putExtra(END_DATE_PICKER, endSelectedDate);
         intent.putExtra(TOMORROW_IS_BORDER, tomorrowIsBorder);
+        intent.putExtra(BEGIN_BORDER_DATE, beginBorderDate);
         activity.startActivityForResult(intent, REQUEST_CODE_PICKER);
     }
 
@@ -100,7 +113,8 @@ public class DateRangePickerActivity extends AppCompatActivity implements DateRa
                 getIntent().getLongExtra(BEGIN_DATE_PICKER, NOT_SELECTED),
                 getIntent().getLongExtra(END_DATE_PICKER, NOT_SELECTED),
                 getIntent().getIntExtra(MAX_RANGE, MAX_RANGE_NOT_SELECTED),
-                getIntent().getBooleanExtra(TOMORROW_IS_BORDER, true));
+                getIntent().getBooleanExtra(TOMORROW_IS_BORDER, true),
+                getIntent().getLongExtra(BEGIN_BORDER_DATE, NOT_SELECTED));
         initDaysOfWeek();
     }
 
