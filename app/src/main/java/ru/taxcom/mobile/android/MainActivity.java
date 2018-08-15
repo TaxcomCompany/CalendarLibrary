@@ -33,13 +33,13 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.period_date)
     public void onPeriodClick() {
         DateRangePickerActivity.start(this, PickerMode.SELECT_PERIOD_DATE, null,
-                null, 6, false, StringUtil.getUtcNoTime(getDate3()).getTime() / 1000);
+                null, 6, false, StringUtil.getUtcNoTime(getDate1()).getTime() / 1000);
     }
 
     @OnClick(R.id.single_date)
     public void onSingleClick() {
         DateRangePickerActivity.start(this, PickerMode.SELECT_SINGLE_DATE, null,
-                null, null, true, StringUtil.getUtcNoTime(getDate3()).getTime() / 1000);
+                null, null, true, null);
     }
 
     @OnClick(R.id.single_date2070)

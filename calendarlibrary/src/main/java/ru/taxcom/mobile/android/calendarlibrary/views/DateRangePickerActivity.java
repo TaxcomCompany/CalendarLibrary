@@ -240,7 +240,8 @@ public class DateRangePickerActivity extends AppCompatActivity implements DateRa
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, DateSelectionFragment.newInstance(SelectionMode.SELECT_MONTH, date, currentYear,
-                        getIntent().getBooleanExtra(TOMORROW_IS_BORDER, true)))
+                        getIntent().getBooleanExtra(TOMORROW_IS_BORDER, true),
+                        getIntent().getLongExtra(BEGIN_BORDER_DATE, NOT_SELECTED)))
                 .addToBackStack(null)
                 .commitAllowingStateLoss();
     }

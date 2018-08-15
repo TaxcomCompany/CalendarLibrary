@@ -1,6 +1,7 @@
 package ru.taxcom.mobile.android.calendarlibrary.util;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import java.util.concurrent.Callable;
 import ru.taxcom.mobile.android.calendarlibrary.R;
 import ru.taxcom.mobile.android.calendarlibrary.model.PickerModel;
 
+import static ru.taxcom.mobile.android.calendarlibrary.util.DatePickerValidation.NOT_SELECTED;
+
 public class DateSelectionValidation {
 
     private int mCountPages;
@@ -21,6 +24,10 @@ public class DateSelectionValidation {
     private long mSelectedDate;
     private int mCurrentYear;
     private boolean mTomorrowIsBorder;
+    /**
+     * month or year
+     */
+    private Long mBeginBorder = 0L;
 
     public void calculateCountYear() {
         Calendar startCalendar = Calendar.getInstance();
@@ -148,7 +155,7 @@ public class DateSelectionValidation {
     }
 
     private boolean isActiveYear(long year) {
-        return year < mNextMonthOrYear;
+        return year < mNextMonthOrYear && year > mBeginBorder;
     }
 
     private boolean isSelectedMonth(Long dateInSec) {
@@ -156,7 +163,7 @@ public class DateSelectionValidation {
     }
 
     private boolean isActiveMonth(Long dateInSec) {
-        return dateInSec < mNextMonthOrYear;
+        return dateInSec < mNextMonthOrYear && dateInSec > mBeginBorder;
     }
 
     private Long getDateWithMonth(Calendar calendar, int i) {
@@ -192,5 +199,21 @@ public class DateSelectionValidation {
 
     public void setTomorrowIsBorder(boolean tomorrowIsBorder) {
         mTomorrowIsBorder = tomorrowIsBorder;
+    }
+
+    public void setBeginMonthBorder(long dateBorder) {
+        if (dateBorder == NOT_SELECTED) return;
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date(dateBorder * 1000));
+        c.add(Calendar.MONTH, -1);
+        mBeginBorder = c.getTimeInMillis() / 1000;
+    }
+
+    public void setBeginYearBorder(long dateBorder) {
+        if (dateBorder == NOT_SELECTED) return;
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date(dateBorder * 1000));
+        c.add(Calendar.YEAR, -1);
+        mBeginBorder = (long) c.get(Calendar.YEAR);
     }
 }

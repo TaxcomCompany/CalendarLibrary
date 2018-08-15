@@ -33,7 +33,7 @@ public class DateSelectionPresenterImpl implements DatePickerSelectionPresenter 
     }
 
     @Override
-    public void initialization(@SelectionMode int mode, long clickedDate, int currentYear, boolean tomorrowIsBorder) {
+    public void initialization(@SelectionMode int mode, long clickedDate, int currentYear, boolean tomorrowIsBorder, long beginBorder) {
         mMode = mode;
         int currentPosition;
         mValidation.setTomorrowIsBorder(tomorrowIsBorder);
@@ -41,6 +41,7 @@ public class DateSelectionPresenterImpl implements DatePickerSelectionPresenter 
             case SelectionMode.SELECT_MONTH:
                 mValidation.calculateCountYear();
                 mValidation.calcNextMonth();
+                mValidation.setBeginMonthBorder(beginBorder);
                 currentPosition = mValidation.getCurrentMonthPosition(clickedDate, currentYear);
                 mView.initPager(mValidation.getPagesCount(), currentPosition, this::createMonths);
                 mView.setTitle(mContext.getString(R.string.date_range_picker_select_month));
@@ -49,6 +50,7 @@ public class DateSelectionPresenterImpl implements DatePickerSelectionPresenter 
             default:
                 mValidation.calculateCountDecades();
                 mValidation.calcNextYear();
+                mValidation.setBeginYearBorder(beginBorder);
                 currentPosition = mValidation.getCurrentYearPosition(clickedDate, currentYear);
                 mView.initPager(mValidation.getPagesCount(), currentPosition, this::createYears);
                 mView.setTitle(mContext.getString(R.string.date_range_picker_select_year));

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.security.PrivateKey;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,14 +28,16 @@ import ru.taxcom.mobile.android.calendarlibrary.presentetion.implemenattion.Date
 import ru.taxcom.mobile.android.calendarlibrary.presentetion.presener.DatePickerSelectionPresenter;
 import ru.taxcom.mobile.android.calendarlibrary.util.customView.ReverseViewPager;
 
+import static ru.taxcom.mobile.android.calendarlibrary.util.DatePickerValidation.NOT_SELECTED;
 import static ru.taxcom.mobile.android.calendarlibrary.views.DateRangePickerActivity.TOMORROW_IS_BORDER;
 
 
 public class DateSelectionFragment extends Fragment implements DatePickerSelectionView {
 
-    public static final String SELECTION_MODE = "mode";
-    public static final String CLICKED_DATE = "clicked_month";
-    public static final String CLICKED_YEAR = "clicked_year";
+    private static final String SELECTION_MODE = "mode";
+    private static final String CLICKED_DATE = "clicked_month";
+    private static final String CLICKED_YEAR = "clicked_year";
+    private static final String BEGIN_BORDER_DATE = "begin_border_date";
 
     @BindView(R2.id.title_picker_selection)
     TextView mTitle;
@@ -52,12 +55,14 @@ public class DateSelectionFragment extends Fragment implements DatePickerSelecti
     public static DateSelectionFragment newInstance(@SelectionMode int mode,
                                                     long currentDateInSec,
                                                     int currentYear,
-                                                    boolean tomorrowIsBorder) {
+                                                    boolean tomorrowIsBorder,
+                                                    long beginBorderDate) {
         Bundle bundle = new Bundle();
         bundle.putInt(SELECTION_MODE, mode);
         bundle.putLong(CLICKED_DATE, currentDateInSec);
         bundle.putInt(CLICKED_YEAR, currentYear);
         bundle.putBoolean(TOMORROW_IS_BORDER, tomorrowIsBorder);
+        bundle.putLong(BEGIN_BORDER_DATE, beginBorderDate);
         DateSelectionFragment fr = new DateSelectionFragment();
         fr.setArguments(bundle);
         return fr;
@@ -81,7 +86,8 @@ public class DateSelectionFragment extends Fragment implements DatePickerSelecti
                 getArguments().getInt(SELECTION_MODE, -1),
                 getArguments().getLong(CLICKED_DATE, -1),
                 getArguments().getInt(CLICKED_YEAR, -1),
-                getArguments().getBoolean(TOMORROW_IS_BORDER, true));
+                getArguments().getBoolean(TOMORROW_IS_BORDER, true),
+                getArguments().getLong(BEGIN_BORDER_DATE, NOT_SELECTED));
     }
 
     @Override
@@ -169,7 +175,9 @@ public class DateSelectionFragment extends Fragment implements DatePickerSelecti
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragment_container, DateSelectionFragment.newInstance(SelectionMode.SELECT_YEAR,
-                        date, currentYear, getArguments().getBoolean(TOMORROW_IS_BORDER, true)))
+                        date, currentYear,
+                        getArguments().getBoolean(TOMORROW_IS_BORDER, true),
+                        getArguments().getLong(BEGIN_BORDER_DATE, NOT_SELECTED)))
                 .addToBackStack(null)
                 .commitAllowingStateLoss();
     }
