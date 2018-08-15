@@ -9,7 +9,7 @@ import ru.taxcom.mobile.android.calendarlibrary.model.PickerModel;
 import ru.taxcom.mobile.android.calendarlibrary.views.DateRangePickerView;
 
 public interface DateRangePresenter {
-    void initialization(@PickerMode int mode, long beginDate, long endDate, int maxRange, boolean tomorrowIsBorder);
+    void initialization(@PickerMode int mode, long beginDate, long endDate, int maxRange, boolean tomorrowIsBorder, long beginBorderDate);
 
     void bindView(DateRangePickerView view);
 

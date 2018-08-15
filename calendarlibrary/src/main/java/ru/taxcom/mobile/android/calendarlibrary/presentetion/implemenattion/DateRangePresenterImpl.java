@@ -19,8 +19,10 @@ import ru.taxcom.mobile.android.calendarlibrary.util.DatePickerValidation;
 import ru.taxcom.mobile.android.calendarlibrary.util.StringUtil;
 import ru.taxcom.mobile.android.calendarlibrary.views.DateRangePickerView;
 
+import static ru.taxcom.mobile.android.calendarlibrary.util.DatePickerValidation.NOT_SELECTED;
+
 public class DateRangePresenterImpl implements DateRangePresenter {
-    public static final int NOT_SELECTED = -1;
+
     private DatePickerValidation mValidation;
     private DateRangePickerView mView;
     @PickerMode
@@ -37,11 +39,16 @@ public class DateRangePresenterImpl implements DateRangePresenter {
     }
 
     @Override
-    public void initialization(@PickerMode int mode, long beginDate, long endDate, int maxRange, boolean tomorrowIsBorder) {
+    public void initialization(@PickerMode int mode,
+                               long beginDate,
+                               long endDate,
+                               int maxRange,
+                               boolean tomorrowIsBorder,
+                               long beginBorderDate) {
         if (mMode == NOT_SELECTED) {
             throw new RuntimeException("mode is required field");
         }
-        mValidation = new DatePickerValidation(tomorrowIsBorder);
+        mValidation = new DatePickerValidation(tomorrowIsBorder, beginBorderDate);
         mMode = mode;
         setSelectedDates(beginDate, endDate);
         setTitle();

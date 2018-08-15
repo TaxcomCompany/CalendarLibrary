@@ -14,6 +14,7 @@ import ru.taxcom.mobile.android.calendarlibrary.model.PickerMode;
 import ru.taxcom.mobile.android.calendarlibrary.util.StringUtil;
 import ru.taxcom.mobile.android.calendarlibrary.views.DateRangePickerActivity;
 
+import static ru.taxcom.mobile.android.calendarlibrary.util.StringUtil.getCalendarUtcNoTime;
 import static ru.taxcom.mobile.android.calendarlibrary.views.DateRangePickerActivity.BEGIN_DATE_PICKER;
 import static ru.taxcom.mobile.android.calendarlibrary.views.DateRangePickerActivity.DATE_TEXT;
 import static ru.taxcom.mobile.android.calendarlibrary.views.DateRangePickerActivity.END_DATE_PICKER;
@@ -31,13 +32,14 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.period_date)
     public void onPeriodClick() {
-        DateRangePickerActivity.start(this, PickerMode.SELECT_PERIOD_DATE, null, null, 6, true);
+        DateRangePickerActivity.start(this, PickerMode.SELECT_PERIOD_DATE, null,
+                null, 6, false, StringUtil.getUtcNoTime(getDate3()).getTime() / 1000);
     }
 
     @OnClick(R.id.single_date)
     public void onSingleClick() {
         DateRangePickerActivity.start(this, PickerMode.SELECT_SINGLE_DATE, null,
-                null, null, true);
+                null, null, true, StringUtil.getUtcNoTime(getDate3()).getTime() / 1000);
     }
 
     @OnClick(R.id.single_date2070)
@@ -45,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
         DateRangePickerActivity.start(this, PickerMode.SELECT_SINGLE_DATE,
                 StringUtil.getUtcNoTime(new Date()).getTime() / 1000,
                 null,
-                null, false);
+                null,
+                false,
+                StringUtil.getUtcNoTime(new Date()).getTime() / 1000);
     }
 
     @OnClick(R.id.period_date2070)
@@ -53,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         DateRangePickerActivity.start(this, PickerMode.SELECT_PERIOD_DATE,
                 StringUtil.getUtcNoTime(getDate1()).getTime() / 1000,
                 StringUtil.getUtcNoTime(getDate2()).getTime() / 1000,
-                null, false);
+                null, false, StringUtil.getUtcNoTime(getDate3()).getTime() / 1000);
     }
 
     private Date getDate1() {
@@ -65,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
     private Date getDate2() {
         Calendar instance = Calendar.getInstance();
         instance.add(Calendar.DAY_OF_MONTH, 60);
+        return instance.getTime();
+    }
+
+    private Date getDate3() {
+        Calendar instance = Calendar.getInstance();
+        instance.add(Calendar.DAY_OF_MONTH, 2);
         return instance.getTime();
     }
 
